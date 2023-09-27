@@ -38,7 +38,15 @@ const config = createTamagui({
     heading: headingFont,
     body: bodyFont
   },
-  themes,
+  themes: {
+    ...themes,
+    light_Divider_Heading: {
+      borderTopColor: tokens.color.gray6Light
+    },
+    dark_Divider_Heading: {
+      borderTopColor: tokens.color.gray2Dark
+    }
+  },
   tokens,
   media: createMedia({
     xs: { maxWidth: 660 },
@@ -64,6 +72,7 @@ declare module "tamagui" {
   // overrides TamaguiCustomConfig so your custom types
   // work everywhere you import `tamagui`
   interface TamaguiCustomConfig extends AppConfig {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
 }
 
 export default config;

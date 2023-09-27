@@ -10,7 +10,8 @@ npm-debug.*
 *.orig.*
 web-build/
 .yarn
-
+# TODO: remove
+.temp_del 
 # macOS
 .DS_Store
 

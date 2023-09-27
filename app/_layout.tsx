@@ -6,11 +6,12 @@ import {
   ThemeProvider
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { SplashScreen, Stack } from "expo-router";
+import { router, SplashScreen, Stack } from "expo-router";
 import { TamaguiProvider, Text, Theme } from "tamagui";
 
 import { MySafeAreaView } from "../components/MySafeAreaView";
 import config from "../tamagui.config";
+import { getAuthToken, isTokenActive } from "../utils/AuthUtils";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,9 +24,18 @@ export default function Layout() {
   });
 
   useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
+    const onAppStart = async () => {
+      const isSignedIn = !!(await getAuthToken()) && (await isTokenActive());
+      if (loaded) {
+        if (isSignedIn) {
+          router.replace("/home");
+        } else if (!isSignedIn) {
+          router.replace("/auth");
+        }
+        SplashScreen.hideAsync();
+      }
+    };
+    onAppStart();
   }, [loaded]);
 
   if (!loaded) return null;
@@ -37,13 +47,13 @@ export default function Layout() {
           <ThemeProvider
             value={colorScheme === "light" ? DefaultTheme : DarkTheme}
           >
-            <MySafeAreaView>
-              <Stack
-                screenOptions={{
-                  headerShown: false
-                }}
-              />
-            </MySafeAreaView>
+            {/* <MySafeAreaView> */}
+            <Stack
+              screenOptions={{
+                headerShown: false
+              }}
+            />
+            {/* </MySafeAreaView> */}
           </ThemeProvider>
         </Theme>
       </Suspense>
